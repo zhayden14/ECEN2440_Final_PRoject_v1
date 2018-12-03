@@ -1,16 +1,12 @@
 #include "msp.h"
+#include "global.h"
+#include "timing.h"
 
-
-/**
- * main.c
- */
 //timing interrupts
 //timer3 reset
 void TA3_0_IRQHandler(void){
     //reset interrupt flag
     TIMER_A3->CCTL[0] &= ~BIT0;
-
-    //in = P4IN;
 
     //perform actions
     timing0();
@@ -22,23 +18,22 @@ void TA3_N_IRQHandler(void){
     short iv = TIMER_A3->IV;
 
     //decide what timing actions to take
-//    switch(iv){
-//    case 0x02:
-        //these functions are defined at the top of the file
-        //to change behavior, you should modify these instead of the ISRs
-        timing1();
-//        break;
-//    case 0x04:
-//        timing2();
-//        break;
-//    case 0x06:
-//        timing3();
-//        break;
-//    case 0x08:
-//        timing4();
-//        break;
-//    }
-
+    switch(iv){
+        case 0x02:
+            //these functions are defined in timing.c and imported from timing.h
+            //to change behavior, you should modify these instead of the ISRs
+            timing1();
+            break;
+        case 0x04:
+            //timing2();
+            break;
+        case 0x06:
+            //timing3();
+            break;
+        case 0x08:
+            //timing4();
+            break;
+        }
 }
 
 void main(void)
