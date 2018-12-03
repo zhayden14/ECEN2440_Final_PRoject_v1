@@ -2,6 +2,9 @@
 #include "global.h"
 #include "timing.h"
 
+//global variables
+global var;
+
 //timing interrupts
 //timer3 reset
 void TA3_0_IRQHandler(void){
@@ -9,7 +12,7 @@ void TA3_0_IRQHandler(void){
     TIMER_A3->CCTL[0] &= ~BIT0;
 
     //perform actions
-    timing0();
+    timing0(&var);
 }
 
 //timer3 Compare
@@ -22,7 +25,7 @@ void TA3_N_IRQHandler(void){
         case 0x02:
             //these functions are defined in timing.c and imported from timing.h
             //to change behavior, you should modify these instead of the ISRs
-            timing1();
+            timing1(&var);
             break;
         case 0x04:
             //timing2();
@@ -39,6 +42,17 @@ void TA3_N_IRQHandler(void){
 void main(void)
 {
 	WDT_A->CTL = WDT_A_CTL_PW | WDT_A_CTL_HOLD;		// stop watchdog timer
+
+	//index for loop
+	int i;
+
+	//initialize global variables
+	var.ctlstate = LINE_FOLLOW;
+	var.cycles = 0;
+	for(i = 0; i < 8; i++){
+	    var.calib[i] = 0;
+	    var.reflect[i] = 0;
+	}
 
     //configure Timer A0 (modify!)
     TIMER_A0->CCTL[0] = 0x0080;    // CCI0 toggle
