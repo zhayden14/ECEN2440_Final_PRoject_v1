@@ -17,6 +17,9 @@ void timing2(void);
 void timing3(void);
 void timing4(void);
 
+<<<<<<< HEAD
 void timingSetup(void);
 
+=======
+>>>>>>> parent of 2a70efe... added timing setup function def
 #endif /* TIMING_H_ */
