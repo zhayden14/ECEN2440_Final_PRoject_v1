@@ -5,10 +5,24 @@
 SHELL = cmd.exe
 
 # Each subdirectory must supply rules for building sources it contributes
+ir_sensor.obj: ../ir_sensor.c $(GEN_OPTS) | $(GEN_HDRS)
+	@echo 'Building file: "$<"'
+	@echo 'Invoking: ARM Compiler'
+	"C:/Program Files (x86)/ti_CodeComposerStudio/ccsv8/tools/compiler/ti-cgt-arm_18.1.2.LTS/bin/armcl" -mv7M4 --code_state=16 --float_support=FPv4SPD16 -me --include_path="C:/Program Files (x86)/ti_CodeComposerStudio/ccsv8/ccs_base/arm/include" --include_path="C:/Program Files (x86)/ti_CodeComposerStudio/ccsv8/ccs_base/arm/include/CMSIS" --include_path="C:/Users/jgamm/Documents/GitHub/ECEN2440_Final_Project_v1" --include_path="C:/Program Files (x86)/ti_CodeComposerStudio/ccsv8/tools/compiler/ti-cgt-arm_18.1.2.LTS/include" --advice:power=all --define=__MSP432P401R__ --define=ccs -g --gcc --diag_warning=225 --diag_wrap=off --display_error_number --abi=eabi --preproc_with_compile --preproc_dependency="ir_sensor.d_raw" $(GEN_OPTS__FLAG) "$<"
+	@echo 'Finished building: "$<"'
+	@echo ' '
+
 main.obj: ../main.c $(GEN_OPTS) | $(GEN_HDRS)
 	@echo 'Building file: "$<"'
 	@echo 'Invoking: ARM Compiler'
 	"C:/Program Files (x86)/ti_CodeComposerStudio/ccsv8/tools/compiler/ti-cgt-arm_18.1.2.LTS/bin/armcl" -mv7M4 --code_state=16 --float_support=FPv4SPD16 -me --include_path="C:/Program Files (x86)/ti_CodeComposerStudio/ccsv8/ccs_base/arm/include" --include_path="C:/Program Files (x86)/ti_CodeComposerStudio/ccsv8/ccs_base/arm/include/CMSIS" --include_path="C:/Users/jgamm/Documents/GitHub/ECEN2440_Final_Project_v1" --include_path="C:/Program Files (x86)/ti_CodeComposerStudio/ccsv8/tools/compiler/ti-cgt-arm_18.1.2.LTS/include" --advice:power=all --define=__MSP432P401R__ --define=ccs -g --gcc --diag_warning=225 --diag_wrap=off --display_error_number --abi=eabi --preproc_with_compile --preproc_dependency="main.d_raw" $(GEN_OPTS__FLAG) "$<"
+	@echo 'Finished building: "$<"'
+	@echo ' '
+
+movement_lib.obj: ../movement_lib.c $(GEN_OPTS) | $(GEN_HDRS)
+	@echo 'Building file: "$<"'
+	@echo 'Invoking: ARM Compiler'
+	"C:/Program Files (x86)/ti_CodeComposerStudio/ccsv8/tools/compiler/ti-cgt-arm_18.1.2.LTS/bin/armcl" -mv7M4 --code_state=16 --float_support=FPv4SPD16 -me --include_path="C:/Program Files (x86)/ti_CodeComposerStudio/ccsv8/ccs_base/arm/include" --include_path="C:/Program Files (x86)/ti_CodeComposerStudio/ccsv8/ccs_base/arm/include/CMSIS" --include_path="C:/Users/jgamm/Documents/GitHub/ECEN2440_Final_Project_v1" --include_path="C:/Program Files (x86)/ti_CodeComposerStudio/ccsv8/tools/compiler/ti-cgt-arm_18.1.2.LTS/include" --advice:power=all --define=__MSP432P401R__ --define=ccs -g --gcc --diag_warning=225 --diag_wrap=off --display_error_number --abi=eabi --preproc_with_compile --preproc_dependency="movement_lib.d_raw" $(GEN_OPTS__FLAG) "$<"
 	@echo 'Finished building: "$<"'
 	@echo ' '
 

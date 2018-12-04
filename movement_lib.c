@@ -28,8 +28,6 @@ void PORT4_IRQHandler()
 
 static inline void setDir(unsigned char, unsigned char);
 
-static inline void setLEDColor(unsigned char);
-
 void setupMovement()
 {
     // set up motor PWM input
@@ -73,7 +71,7 @@ void setupMovement()
     setLEDColor(GREEN);
 }
 
-static inline void setLEDColor(unsigned char color)
+inline void setLEDColor(unsigned char color)
 {
     if(color==RED) {
         P2->OUT |= BIT0;
@@ -143,24 +141,23 @@ inline void moveStraightDist(size_t ticks)
     unsigned int speed_r_min = 150; // ...
     const unsigned int slow_thresh = 500; // number of encoder ticks before stop at which deceleration begins
     const unsigned int fast_thresh = 200; // number encoder ticks after start at which acceleration finishes
-    size_t i,j; // storage for timer between corrections
-    size_t togo_r, togo_l; // storage for ticks left for right/left motor
+    size_t hasgone_r, hasgone_l; // storage for ticks left for right/left motor
     int ticks_0_r = 0, ticks_0_l = 0;
     clearTurns();
     while(turns_rgt<dist_r || turns_lft<dist_l)
     {
         if(turns_rgt-ticks_0_r>50 || turns_lft-ticks_0_l>50) {
-            togo_r = (1000*(turns_rgt-ticks_0_r))/dist_r; // scaled to base on proportion of travel left, since absolute values can vary
-            togo_l = (1000*(turns_lft-ticks_0_l))/dist_l; // ...
+            hasgone_r = (1000*(turns_rgt-ticks_0_r))/dist_r; // scaled to base on proportion of travel left, since absolute values can vary
+            hasgone_l = (1000*(turns_lft-ticks_0_l))/dist_l; // ...
             const int CORRECTION = 5;
-            if(togo_r<togo_l) {
+            if(hasgone_r<hasgone_l) {
                 speed_r_inc += CORRECTION; // speed up right wheel, slow down left wheel if left has completed greater proportion of distance
                 speed_r_min += CORRECTION; // Necessary since motor speed is highly variable and unpredictable, and if wheels travel same distance
                 speed_l_inc -= CORRECTION; //   the final angle will be correct, but will be offset from start. Need same speed and distance traveled.
                 speed_l_min -= CORRECTION; // ...
                 setLEDColor(RED);
             }
-            else if(togo_l<togo_r) {
+            else if(hasgone_l<hasgone_r) {
                 speed_l_inc += CORRECTION; // speed up left wheel, slow down right wheel if right has completed greater proportion of distance
                 speed_l_min += CORRECTION; // ...
                 speed_r_inc -= CORRECTION; // ...
@@ -198,7 +195,7 @@ inline void rotDeg(int deg)
     deg *= 2; // simple adjustment since 360 encoder ticks per rotation
     clearTurns();
 
-    while(turns_rgt<deg || turns_lft<(998*deg)/1000) { // correction since right wheel is crooked
+    while(turns_rgt<(1000*deg)/998 || turns_lft<deg) { // correction since right wheel is crooked
         if(turns_rgt>deg) setPWMPct(RIGHT_MOTOR,0); // turn off right when traveled far enough
         else setPWMPct(RIGHT_MOTOR, 500 - (400*turns_rgt)/deg); // decelerate right as approaches correct distance
         if(turns_lft>deg) setPWMPct(LEFT_MOTOR,0); // turn off left when traveled far enough

@@ -10,7 +10,9 @@ GEN_OPTS__FLAG :=
 GEN_CMDS__FLAG := 
 
 ORDERED_OBJS += \
+"./ir_sensor.obj" \
 "./main.obj" \
+"./movement_lib.obj" \
 "./startup_msp432p401r_ccs.obj" \
 "./system_msp432p401r.obj" \
 "./timing.obj" \
@@ -157,8 +159,8 @@ ECEN2440_Final_Project_v1.hex: $(EXE_OUTPUTS)
 # Other Targets
 clean:
 	-$(RM) $(BIN_OUTPUTS__QUOTED)$(EXE_OUTPUTS__QUOTED)
-	-$(RM) "main.obj" "startup_msp432p401r_ccs.obj" "system_msp432p401r.obj" "timing.obj" 
-	-$(RM) "main.d" "startup_msp432p401r_ccs.d" "system_msp432p401r.d" "timing.d" 
+	-$(RM) "ir_sensor.obj" "main.obj" "movement_lib.obj" "startup_msp432p401r_ccs.obj" "system_msp432p401r.obj" "timing.obj" 
+	-$(RM) "ir_sensor.d" "main.d" "movement_lib.d" "startup_msp432p401r_ccs.d" "system_msp432p401r.d" "timing.d" 
 	-@echo 'Finished clean'
 	-@echo ' '
 

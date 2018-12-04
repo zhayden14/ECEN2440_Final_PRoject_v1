@@ -33,4 +33,6 @@ inline void moveStraightDist(size_t ticks);
  // Robot will move straight by specified number of ticks; 360 ticks per rotation. Encoder-based error correction to move approximately straight.
     // ticks: Number of encoder ticks by which to move robot. Positive number.
 
+inline void setLEDColor(unsigned char color);
+
 #endif /* MOVEMENT_LIB_H_ */
