@@ -14,6 +14,7 @@
 #define BUMP_AVOID 1
 #define IR_AVOID 2
 #define IR_FOLLOW 3
+#define DEAD_RECKONING 4
 
 typedef struct{
     char ctlstate;

@@ -43,13 +43,13 @@ void timing0(global * vars){
     else if(vars->cycles == 17){
         for(i = 0; i < 8; i++) vars->calib[i] /= 8;
     }
-    else if((vars->cycles > 16) && (vars->cycles < 25)){
+    /*else if((vars->cycles > 16) && (vars->cycles < 25)){
         for(i = 0; i < 8; i++){
             vars->reflect[i] -= vars->calib[i];
             if(vars->reflect[i] < 0) vars->reflect[i] *= -1;
             //if(reflect[i] > devmax[i]) devmax[i] = reflect[i];
         }
-    }
+    }*/
     if(vars->cycles == 25){
         //enable IR sensors and bump switches
         //start motors

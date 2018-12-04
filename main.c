@@ -54,7 +54,7 @@ void main(void)
 	    var.reflect[i] = 0;
 	}
 
-    //configure Timer A0 (modify!)
+    /*//configure Timer A0 (modify!)
     TIMER_A0->CCTL[0] = 0x0080;    // CCI0 toggle
     TIMER_A0->CCR[0] =  255;    // Period or about 10 kHz
     //TIMER_A0->EX0 =     0x0005;    // Divide by 3
@@ -66,7 +66,7 @@ void main(void)
     TIMER_A0->CCR[2] =  0;
     TIMER_A0->CCR[3] =  128;
     TIMER_A0->CCR[4] =  128;
-    TIMER_A0->CTL =     0x0250;    // up mode, divide by 1
+    TIMER_A0->CTL =     0x0250;    // up mode, divide by 1*/
 
     //configure Timer A1 (capture 0-3)
     TIMER_A1->CCTL[0] = 0x0080;        //compare mode
