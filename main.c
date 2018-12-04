@@ -2,9 +2,6 @@
 #include "global.h"
 #include "timing.h"
 
-//global variables
-global var;
-
 //timing interrupts
 //timer3 reset
 void TA3_0_IRQHandler(void){
@@ -12,7 +9,7 @@ void TA3_0_IRQHandler(void){
     TIMER_A3->CCTL[0] &= ~BIT0;
 
     //perform actions
-    timing0(&var);
+    timing0();
 }
 
 //timer3 Compare
@@ -25,7 +22,7 @@ void TA3_N_IRQHandler(void){
         case 0x02:
             //these functions are defined in timing.c and imported from timing.h
             //to change behavior, you should modify these instead of the ISRs
-            timing1(&var);
+            timing1();
             break;
         case 0x04:
             //timing2();
@@ -55,4 +52,5 @@ void main(void)
 	}
 
 	timingSetup();
+
 }
