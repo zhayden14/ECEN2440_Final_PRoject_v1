@@ -109,7 +109,6 @@ void timing2(void){}
 
 void timing3(void){}
 
-<<<<<<< HEAD
 void timing4(global * vars){}
 
 void timingSetup(void){
@@ -142,6 +141,3 @@ void timingSetup(void){
      TIMER_A3->CTL =     0x0210;    // up mode, divide by 1
 
 }
-=======
-void timing4(void){}
->>>>>>> parent of 822f6df... global variables fixed
