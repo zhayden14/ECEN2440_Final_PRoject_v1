@@ -6,6 +6,9 @@
 #define RIGHT_MOTOR 2
 #define FORWARDS 0
 #define BACKWARDS 1
+#define RED 0
+#define GREEN 1
+#define BLUE 2
 
 static size_t turns_rgt = 0;
 static size_t turns_lft = 0;
@@ -24,6 +27,8 @@ void PORT4_IRQHandler()
 }
 
 static inline void setDir(unsigned char, unsigned char);
+
+static inline void setLEDColor(unsigned char);
 
 void setupMovement()
 {
@@ -60,6 +65,26 @@ void setupMovement()
     NVIC_EnableIRQ(PORT4_IRQn);
     setDir(LEFT_MOTOR,FORWARDS);
     setDir(RIGHT_MOTOR,FORWARDS);
+    // set up LED
+    P2->SEL0 &= ~(BIT0|BIT1|BIT2);
+    P2->SEL1 &= ~(BIT0|BIT1|BIT2);
+    P2->DIR |= (BIT0|BIT1|BIT2);
+    P2->DS |= (BIT0|BIT1|BIT2);
+    setLEDColor(GREEN);
+}
+
+static inline void setLEDColor(unsigned char color)
+{
+    if(color==RED) {
+        P2->OUT |= BIT0;
+        P2->OUT &= ~(BIT1|BIT2);
+    } else if(color==GREEN) {
+        P2->OUT |= BIT1;
+        P2->OUT &= ~(BIT0|BIT2);
+    } else if(color==BLUE) {
+        P2->OUT |= BIT2;
+        P2->OUT &= ~(BIT0|BIT1);
+    }
 }
 
 static inline void setPWMPct(unsigned char motor, unsigned int percent)
@@ -119,25 +144,33 @@ inline void moveStraightDist(size_t ticks)
     const unsigned int slow_thresh = 500; // number of encoder ticks before stop at which deceleration begins
     const unsigned int fast_thresh = 200; // number encoder ticks after start at which acceleration finishes
     size_t i,j; // storage for timer between corrections
-    unsigned int togo_r, togo_l; // storage for ticks left for right/left motor
+    size_t togo_r, togo_l; // storage for ticks left for right/left motor
+    int ticks_0_r = 0, ticks_0_l = 0;
     clearTurns();
     while(turns_rgt<dist_r || turns_lft<dist_l)
     {
-        togo_r = (1000*(dist_r-turns_rgt))/dist_r; // scaled to base on proportion of travel left, since absolute values can vary
-        togo_l = (1000*(dist_l-turns_lft))/dist_l; // ...
-        if(togo_r>togo_l) {
-            speed_r_inc += 1; // speed up right wheel, slow down left wheel if left has completed greater proportion of distance
-            speed_r_min += 1; // Necessary since motor speed is highly variable and unpredictable, and if wheels travel same distance
-            speed_l_inc -= 1; //   the final angle will be correct, but will be offset from start. Need same speed and distance traveled.
-            speed_l_min -= 1; // ...
+        if(turns_rgt-ticks_0_r>50 || turns_lft-ticks_0_l>50) {
+            togo_r = (1000*(turns_rgt-ticks_0_r))/dist_r; // scaled to base on proportion of travel left, since absolute values can vary
+            togo_l = (1000*(turns_lft-ticks_0_l))/dist_l; // ...
+            const int CORRECTION = 5;
+            if(togo_r<togo_l) {
+                speed_r_inc += CORRECTION; // speed up right wheel, slow down left wheel if left has completed greater proportion of distance
+                speed_r_min += CORRECTION; // Necessary since motor speed is highly variable and unpredictable, and if wheels travel same distance
+                speed_l_inc -= CORRECTION; //   the final angle will be correct, but will be offset from start. Need same speed and distance traveled.
+                speed_l_min -= CORRECTION; // ...
+                setLEDColor(RED);
+            }
+            else if(togo_l<togo_r) {
+                speed_l_inc += CORRECTION; // speed up left wheel, slow down right wheel if right has completed greater proportion of distance
+                speed_l_min += CORRECTION; // ...
+                speed_r_inc -= CORRECTION; // ...
+                speed_r_min -= CORRECTION; // ...
+                setLEDColor(BLUE);
+            }
+            else
+                setLEDColor(GREEN);
+            ticks_0_r = turns_rgt, ticks_0_l = turns_lft;
         }
-        if(togo_l>togo_r) {
-            speed_l_inc += 1; // speed up left wheel, slow down right wheel if right has completed greater proportion of distance
-            speed_l_min += 1; // ...
-            speed_r_inc -= 1; // ...
-            speed_r_min -= 1; // ...
-        }
-        i = turns_lft, j = turns_rgt;
         if(turns_rgt>=dist_r) setPWMPct(RIGHT_MOTOR,0); // disable right if traveled far enough
         else if(turns_rgt<=fast_thresh) // accelerate right to max speed while below specified distance threshold
             setPWMPct(RIGHT_MOTOR,speed_r_min + (speed_r_inc*turns_rgt)/fast_thresh);
@@ -148,7 +181,6 @@ inline void moveStraightDist(size_t ticks)
             setPWMPct(LEFT_MOTOR,speed_l_min + (speed_l_inc*turns_lft)/fast_thresh);
         else if(turns_lft>=slow_thresh) // decelerate left to min speed while above specified distance threshold
             setPWMPct(LEFT_MOTOR,speed_l_min + (speed_l_inc*(dist_l-turns_lft))/slow_thresh);
-        while(turns_lft-i<30 && turns_rgt-j<30); // delay until robot has traveled ~30 encoder ticks to prevent overcorrection of speed difference
     }
     powerDiff(0,0);
 }
@@ -163,11 +195,10 @@ inline void rotDeg(int deg)
         setDir(RIGHT_MOTOR,FORWARDS);
     }
     deg = abs(deg); // at this point deg no longer represents actual degrees to rotate, rather number of encoder ticks for each wheel
-    ++deg; // correction as else robot tends not to travel far enough
     deg *= 2; // simple adjustment since 360 encoder ticks per rotation
     clearTurns();
 
-    while(turns_rgt<deg || turns_lft<deg-4) { // correction since right wheel is crooked
+    while(turns_rgt<deg || turns_lft<(998*deg)/1000) { // correction since right wheel is crooked
         if(turns_rgt>deg) setPWMPct(RIGHT_MOTOR,0); // turn off right when traveled far enough
         else setPWMPct(RIGHT_MOTOR, 500 - (400*turns_rgt)/deg); // decelerate right as approaches correct distance
         if(turns_lft>deg) setPWMPct(LEFT_MOTOR,0); // turn off left when traveled far enough
