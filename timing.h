@@ -17,6 +17,6 @@ void timing2(global * vars);
 void timing3(global * vars);
 void timing4(global * vars);
 
-void timingSetup();
+void timingSetup(void);
 
 #endif /* TIMING_H_ */

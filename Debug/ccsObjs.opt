@@ -1,1 +1,1 @@
-"./main.obj" "./startup_msp432p401r_ccs.obj" "./system_msp432p401r.obj" "./timing.obj" "../msp432p401r.cmd" -llibc.a 
+"./main.obj" "./movement_lib.obj" "./startup_msp432p401r_ccs.obj" "./system_msp432p401r.obj" "./timing.obj" "../msp432p401r.cmd" -llibc.a 
