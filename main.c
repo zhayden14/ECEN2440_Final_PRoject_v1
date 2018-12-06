@@ -60,4 +60,7 @@ void main(void)
 	setupMovement();
 	timingSetup();
 
+	while(1){
+	    for(i = 0; i < 65536; i++){}
+	}
 }

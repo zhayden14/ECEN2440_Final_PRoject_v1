@@ -82,7 +82,7 @@ void timing0(global * vars){
         vars->irDriveR += peak/1024;
 
         if(vars->ctlstate == LINE_FOLLOW){
-            powerDiff(vars->irDriveL, vars->irDriveR);
+            powerDiff(500, vars->irDriveR);
         }
         else{
             //reset to go straight when line follower reenabled
@@ -144,4 +144,7 @@ void timingSetup(void){
      //TIMER_A3->CCR[2] =  500;
      TIMER_A3->CTL =     0x0210;    // up mode, divide by 1
 
+     //enable interrupts
+     NVIC_EnableIRQ(TA3_0_IRQn);
+     NVIC_EnableIRQ(TA3_N_IRQn);
 }
