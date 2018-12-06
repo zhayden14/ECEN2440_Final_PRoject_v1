@@ -17,6 +17,8 @@ timing.obj: D:/Programs/ti/ccsv8/ccs_base/arm/include/CMSIS/cmsis_compiler.h
 timing.obj: D:/Programs/ti/ccsv8/ccs_base/arm/include/CMSIS/cmsis_ccs.h
 timing.obj: D:/Programs/ti/ccsv8/ccs_base/arm/include/system_msp432p401r.h
 timing.obj: ../global.h
+timing.obj: ../movement_lib.h
+timing.obj: D:/Programs/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.3.LTS/include/stddef.h
 timing.obj: ../timing.h
 
 ../timing.c: 
@@ -36,4 +38,6 @@ D:/Programs/ti/ccsv8/ccs_base/arm/include/CMSIS/cmsis_compiler.h:
 D:/Programs/ti/ccsv8/ccs_base/arm/include/CMSIS/cmsis_ccs.h: 
 D:/Programs/ti/ccsv8/ccs_base/arm/include/system_msp432p401r.h: 
 ../global.h: 
+../movement_lib.h: 
+D:/Programs/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.3.LTS/include/stddef.h: 
 ../timing.h: 

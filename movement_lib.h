@@ -8,6 +8,8 @@
 #ifndef MOVEMENT_LIB_H_
 #define MOVEMENT_LIB_H_
 
+#include <stddef.h>
+
 void setupMovement();
  // Run function to set up pins associated with motion. Will not affect other pins.
 

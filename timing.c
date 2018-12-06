@@ -7,6 +7,7 @@
 
 #include "msp.h"
 #include "global.h"
+#include "movement_lib.h"
 #include "timing.h"
 
 void timing0(global * vars){
@@ -76,8 +77,10 @@ void timing0(global * vars){
 
 
         if(vars->ctlstate == LINE_FOLLOW){
-            //setLeftPWM(PWMleft);
-            //setRightPWM(PWMright);
+            //powerDiff
+        }
+        else{
+            //reset to go straight when line follower reenabled
         }
     }
 }

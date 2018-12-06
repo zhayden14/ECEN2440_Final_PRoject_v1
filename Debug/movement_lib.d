@@ -20,6 +20,7 @@ movement_lib.obj: D:/Programs/ti/ccsv8/ccs_base/arm/include/CMSIS/cmsis_compiler
 movement_lib.obj: D:/Programs/ti/ccsv8/ccs_base/arm/include/CMSIS/cmsis_ccs.h
 movement_lib.obj: D:/Programs/ti/ccsv8/ccs_base/arm/include/system_msp432p401r.h
 movement_lib.obj: ../movement_lib.h
+movement_lib.obj: D:/Programs/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.3.LTS/include/stddef.h
 
 ../movement_lib.c: 
 D:/Programs/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.3.LTS/include/stdlib.h: 
@@ -41,3 +42,4 @@ D:/Programs/ti/ccsv8/ccs_base/arm/include/CMSIS/cmsis_compiler.h:
 D:/Programs/ti/ccsv8/ccs_base/arm/include/CMSIS/cmsis_ccs.h: 
 D:/Programs/ti/ccsv8/ccs_base/arm/include/system_msp432p401r.h: 
 ../movement_lib.h: 
+D:/Programs/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.3.LTS/include/stddef.h: 

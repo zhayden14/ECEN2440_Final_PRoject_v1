@@ -28,6 +28,8 @@ unsigned long cycles;
 int calib[8];
 //reflectance data from line following sensors
 int reflect[8];
+//IR sensor motor drive
+unsigned int irDriveL, irDriveR;
 } global;
 
 #endif /* GLOBAL_H_ */
