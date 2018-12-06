@@ -14,6 +14,8 @@
 #define BUMP_AVOID 1
 #define IR_AVOID 2
 #define IR_FOLLOW 3
+#define DEAD_RECKONING 4
+#define NONE 5
 
 //defines which sensor algorithm has control
 //0 -

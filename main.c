@@ -48,8 +48,10 @@ void main(void)
 	int i;
 
 	//initialize global variables
-	var.ctlstate = LINE_FOLLOW;
+	var.ctlstate = NONE;
 	var.cycles = 0;
+	var.irDriveL = 500;
+	var.irDriveR = 500;
 	for(i = 0; i < 8; i++){
 	    var.calib[i] = 0;
 	    var.reflect[i] = 0;
