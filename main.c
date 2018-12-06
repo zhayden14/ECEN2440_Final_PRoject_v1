@@ -1,5 +1,6 @@
 #include "msp.h"
 #include "global.h"
+#include "movement_lib.h"
 #include "timing.h"
 
 //global variables
@@ -54,6 +55,7 @@ void main(void)
 	    var.reflect[i] = 0;
 	}
 
+	setupMovement();
 	timingSetup();
 
 }
