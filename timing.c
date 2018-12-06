@@ -76,11 +76,17 @@ void timing0(global * vars){
         //characterize "waveform" to find splits, lost lines, etc.
 
 
+        //adjust irDriver variables
+        vars->irDriveL -= peak/1024;
+        vars->irDriveR += peak/1024;
+
         if(vars->ctlstate == LINE_FOLLOW){
-            //powerDiff
+            powerDiff(vars->irDriveL, vars->irDriveR);
         }
         else{
             //reset to go straight when line follower reenabled
+            vars->irDriveL = 500;
+            vars->irDriveR = 500;
         }
     }
 }
