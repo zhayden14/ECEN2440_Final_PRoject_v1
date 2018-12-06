@@ -9,17 +9,17 @@
 #include "global.h"
 #include "timing.h"
 
-void timing0(void){
+void timing0(global * vars){
     int norm = 0, peak = 0;
     int linedata[8] = {0, 0, 0, 0, 0, 0, 0, 0};
-    cycles++;
+    vars->cycles++;
     //copy previous reflectance data
     char i;
     for(i = 0; i < 4; i++){
-        reflect[i] = TIMER_A1->CCR[i+1];
+        vars->reflect[i] = TIMER_A1->CCR[i+1];
     }
     for(i = 4; i < 8; i++){
-        reflect[i] = TIMER_A2->CCR[i-3];
+        vars->reflect[i] = TIMER_A2->CCR[i-3];
     }
 
     //set ports 5, 6, 7 to GPIO
@@ -34,22 +34,16 @@ void timing0(void){
     P7DIR |= 0xF0;
 
     //calibration
-    if((cycles > 8) && (cycles < 17)){
+    if((vars->cycles > 8) && (vars->cycles < 17)){
         for(i = 0; i < 8; i++){
-            calibration[i] += reflect[i];
+            vars->calib[i] += vars->reflect[i];
         }
     }
-    else if(cycles == 17){
-        for(i = 0; i < 8; i++) calibration[i] /= 8;
+    else if(vars->cycles == 17){
+        for(i = 0; i < 8; i++) vars->calib[i] /= 8;
     }
-    else if((cycles > 16) && (cycles < 25)){
-        for(i = 0; i < 8; i++){
-            reflect[i] -= calibration[i];
-            if(reflect[i] < 0) reflect[i] *= -1;
-            if(reflect[i] > devmax[i]) devmax[i] = reflect[i];
-        }
-    }
-    if(cycles == 25){
+
+    if(vars->cycles == 25){
         //enable IR sensors and bump switches
         //start motors
     }
@@ -58,9 +52,9 @@ void timing0(void){
         //motor speed control
         //center around calibration value + take absolute value
         for(i = 0; i < 8; i++){
-            reflect[i] -= calibration[i];
-            if(reflect[i] < 0) reflect[i] *= -1;
-            linedata[i] = refelct[i];
+            vars->reflect[i] -= vars->calib[i];
+            if(vars->reflect[i] < 0) vars->reflect[i] *= -1;
+            linedata[i] = vars->reflect[i];
         }
         /*//for controlling RGB LED (only if PMAP control set up)
         TIMER_A0->CCR[3] = reflect[5]/512;
@@ -74,21 +68,21 @@ void timing0(void){
         for(i = 0; i < 8; i++){
             linedata[i] *= 1024;
             linedata[i] /= norm;
-            peak += i * linedata[i]
+            peak += i * linedata[i];
         }
         //peak - 4096 should give posn. of center of the line on scale from -4096 to +4096
 
         //characterize "waveform" to find splits, lost lines, etc.
 
 
-        if(ctlstate == LINE_FOLLOW){
-            setLeftPWM(PWMleft);
-            setRightPWM(PWMright);
+        if(vars->ctlstate == LINE_FOLLOW){
+            //setLeftPWM(PWMleft);
+            //setRightPWM(PWMright);
         }
     }
 }
 
-void timing1(void){
+void timing1(global * vars){
     //set ports 5,6,7 to inputs
     P5DIR &= 0x3F;
     P6DIR &= 0x3F;
@@ -105,9 +99,9 @@ void timing1(void){
 
 }
 
-void timing2(void){}
+void timing2(global * vars){}
 
-void timing3(void){}
+void timing3(global * vars){}
 
 void timing4(global * vars){}
 

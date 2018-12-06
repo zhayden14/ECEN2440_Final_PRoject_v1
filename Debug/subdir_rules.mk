@@ -9,7 +9,6 @@ main.obj: ../main.c $(GEN_OPTS) | $(GEN_HDRS)
 	@echo 'Building file: "$<"'
 	@echo 'Invoking: ARM Compiler'
 	"D:/Programs/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.3.LTS/bin/armcl" -mv7M4 --code_state=16 --float_support=FPv4SPD16 -me --include_path="D:/Programs/ti/ccsv8/ccs_base/arm/include" --include_path="D:/Programs/ti/ccsv8/ccs_base/arm/include/CMSIS" --include_path="D:/CU sophomore/ECEN2440/ECEN2440_Final_Project_v1" --include_path="D:/Programs/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.3.LTS/include" --advice:power=all --define=__MSP432P401R__ --define=ccs -g --gcc --diag_warning=225 --diag_wrap=off --display_error_number --abi=eabi --preproc_with_compile --preproc_dependency="main.d_raw" $(GEN_OPTS__FLAG) "$<"
-<<<<<<< HEAD
 	@echo 'Finished building: "$<"'
 	@echo ' '
 
@@ -17,8 +16,6 @@ movement_lib.obj: ../movement_lib.c $(GEN_OPTS) | $(GEN_HDRS)
 	@echo 'Building file: "$<"'
 	@echo 'Invoking: ARM Compiler'
 	"D:/Programs/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.3.LTS/bin/armcl" -mv7M4 --code_state=16 --float_support=FPv4SPD16 -me --include_path="D:/Programs/ti/ccsv8/ccs_base/arm/include" --include_path="D:/Programs/ti/ccsv8/ccs_base/arm/include/CMSIS" --include_path="D:/CU sophomore/ECEN2440/ECEN2440_Final_Project_v1" --include_path="D:/Programs/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.3.LTS/include" --advice:power=all --define=__MSP432P401R__ --define=ccs -g --gcc --diag_warning=225 --diag_wrap=off --display_error_number --abi=eabi --preproc_with_compile --preproc_dependency="movement_lib.d_raw" $(GEN_OPTS__FLAG) "$<"
-=======
->>>>>>> parent of 88ef4ab... added movement library
 	@echo 'Finished building: "$<"'
 	@echo ' '
 

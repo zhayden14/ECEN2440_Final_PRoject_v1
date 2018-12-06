@@ -11,11 +11,11 @@
 //#import "msp.h"
 //#import "global.h"
 
-void timing0(void);
-void timing1(void);
-void timing2(void);
-void timing3(void);
-void timing4(void);
+void timing0(global * vars);
+void timing1(global * vars);
+void timing2(global * vars);
+void timing3(global * vars);
+void timing4(global * vars);
 
 void timingSetup(void);
 

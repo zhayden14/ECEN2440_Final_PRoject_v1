@@ -20,12 +20,14 @@
 //1 -
 //2 -
 //3 -
-char ctlstate = 0;
+typedef struct{
+char ctlstate;
 //records the number of this cycle of timer A3
-unsigned long cycle = 0;
+unsigned long cycles;
 //calibration data for line following code
-int calib[8] = {0, 0, 0, 0, 0, 0, 0, 0};
+int calib[8];
 //reflectance data from line following sensors
-int reflect[8] = {0, 0, 0, 0, 0, 0, 0, 0};
+int reflect[8];
+} global;
 
 #endif /* GLOBAL_H_ */
