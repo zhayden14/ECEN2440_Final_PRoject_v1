@@ -16,7 +16,7 @@ void timing0(global * vars){
     int linedata[8] = {0, 0, 0, 0, 0, 0, 0, 0};
     vars->cycles++;
     //copy previous reflectance data
-    char i, on = 0, mask = 1;;
+    char i;//, on = 0, mask = 1;
     for(i = 0; i < 4; i++){
         vars->reflect[i] = TIMER_A1->CCR[i+1];
     }
@@ -84,22 +84,22 @@ void timing0(global * vars){
         //vars->irDriveR -= (vars->peak-4096)/512;
 
         if(vars->ctlstate == LINE_FOLLOW){
-            if(reflect[0] > 2048){
+            if(vars->reflect[0] > 2048){
                 powerDiff(125, 16);
             }
-            else if(reflect[7] > 2048){
+            else if(vars->reflect[7] > 2048){
                 powerDiff(16, 125);
             }
-            else if(reflect[1] > 2048){
+            else if(vars->reflect[1] > 2048){
                 powerDiff(125, 32);
             }
-            else if(reflect[6] > 2048){
+            else if(vars->reflect[6] > 2048){
                 powerDiff(32, 125);
             }
-            else if(reflect[2] > 2048){
+            else if(vars->reflect[2] > 2048){
                 powerDiff(125, 63);
             }
-            else if(reflect[5] > 2048){
+            else if(vars->reflect[5] > 2048){
                 powerDiff(63, 125);
             }
             else{

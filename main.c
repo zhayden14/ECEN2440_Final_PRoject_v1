@@ -44,7 +44,7 @@ void TA3_N_IRQHandler(void){
 void PORT6_IRQHandler(void){
     //disable interrupt
     NVIC_DisableIRQ(PORT6_IRQn);
-    var->ctlstate = BUMP_AVOID;
+    var.ctlstate = BUMP_AVOID;
     //will clear flags and reenable interrupt later
 
     //back up
@@ -68,7 +68,7 @@ void PORT6_IRQHandler(void){
     moveStraightDist(2880);
     rotDeg(45);
     moveStraightDist(3600);
-    var->ctlstate = LINE_FOLLOW;
+    var.ctlstate = LINE_FOLLOW;
 }
 
 void main(void)

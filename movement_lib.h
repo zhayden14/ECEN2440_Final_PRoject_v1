@@ -10,6 +10,14 @@
 
 #include <stddef.h>
 
+#define LEFT_MOTOR 1
+#define RIGHT_MOTOR 2
+#define FORWARDS 0
+#define BACKWARDS 1
+#define RED 0
+#define GREEN 1
+#define BLUE 2
+
 void setupMovement();
  // Run function to set up pins associated with motion. Will not affect other pins.
 
@@ -36,5 +44,7 @@ inline void moveStraightDist(size_t ticks);
     // ticks: Number of encoder ticks by which to move robot. Positive number.
 
 inline void setLEDColor(unsigned char color);
+
+inline void setDir(unsigned char, unsigned char);
 
 #endif /* MOVEMENT_LIB_H_ */
