@@ -11,11 +11,12 @@
 #include "timing.h"
 
 void timing0(global * vars){
-    int norm = 0, peak = 0;
+    int norm = 0;
+    vars->peak = 0;
     int linedata[8] = {0, 0, 0, 0, 0, 0, 0, 0};
     vars->cycles++;
     //copy previous reflectance data
-    char i;
+    char i, on = 0, mask = 1;;
     for(i = 0; i < 4; i++){
         vars->reflect[i] = TIMER_A1->CCR[i+1];
     }
@@ -70,24 +71,40 @@ void timing0(global * vars){
         for(i = 0; i < 8; i++){
             linedata[i] *= 1024;
             linedata[i] /= norm;
-            peak += i * linedata[i];
+            vars->peak += i * linedata[i];
         }
         //peak - 4096 should give posn. of center of the line on scale from -4096 to +4096
 
         //characterize "waveform" to find splits, lost lines, etc.
 
 
-        //adjust irDriver variables
-        vars->irDriveL -= peak/1024;
-        vars->irDriveR += peak/1024;
+
+        //vars->irDriveL += (vars->peak-4096)/512;
+        //vars->irDriveR -= (vars->peak-4096)/512;
 
         if(vars->ctlstate == LINE_FOLLOW){
-            powerDiff(500, vars->irDriveR);
-        }
-        else{
-            //reset to go straight when line follower reenabled
-            vars->irDriveL = 500;
-            vars->irDriveR = 500;
+            if(reflect[0] > 2048){
+                powerDiff(125, 16);
+            }
+            else if(reflect[7] > 2048){
+                powerDiff(16, 125);
+            }
+            else if(reflect[1] > 2048){
+                powerDiff(125, 32);
+            }
+            else if(reflect[6] > 2048){
+                powerDiff(32, 125);
+            }
+            else if(reflect[2] > 2048){
+                powerDiff(125, 63);
+            }
+            else if(reflect[5] > 2048){
+                powerDiff(63, 125);
+            }
+            else{
+                powerDiff(125, 125);
+            }
+
         }
     }
 }
@@ -143,6 +160,27 @@ void timingSetup(void){
      //TIMER_A3->CCTL[2] = 0x0040;
      //TIMER_A3->CCR[2] =  500;
      TIMER_A3->CTL =     0x0210;    // up mode, divide by 1
+
+     //configure port 5 (capture input - TA2)
+     P5DIR &= 0x3F;
+     P5DS |= 0xC0;
+     P5SEL0 |= 0xC0;
+     P5SEL1 &= 0x3F;
+     P5OUT |= 0xC0;
+
+     //configure port 6 (capture input - TA2)
+     P6DIR &= 0x3F;
+     P6DS |= 0xC0;
+     P6SEL0 |= 0xC0;
+     P6SEL1 &= 0x3F;
+     P6OUT |= 0xC0;
+
+     //configure port 7 (capture input - TA1)
+     P7DIR &= 0x0F;
+     P7DS |= 0xF0;
+     P7SEL0 |= 0xF0;
+     P7SEL1 &= 0x0F;
+     P7OUT |= 0xF0;
 
      //enable interrupts
      NVIC_EnableIRQ(TA3_0_IRQn);

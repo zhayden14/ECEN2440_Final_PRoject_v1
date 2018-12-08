@@ -32,6 +32,8 @@ int calib[8];
 int reflect[8];
 //IR sensor motor drive
 unsigned int irDriveL, irDriveR;
+//peak (so I can watch it in debug window
+int peak;
 } global;
 
 #endif /* GLOBAL_H_ */
