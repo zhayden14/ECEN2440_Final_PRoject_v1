@@ -11,8 +11,26 @@
 #include "timing.h"
 
 void timing0(global * vars){
-    int norm = 0, peak = 0;
-    int linedata[8] = {0, 0, 0, 0, 0, 0, 0, 0};
+    int peak = 0, diff = 0;
+    int sum_l, sum_r;
+    int sensor_ref[6][2];
+
+    // values below which sensor is over a line
+    sensor_ref[0][0] = 6250;
+    sensor_ref[1][0] = 6000;
+    sensor_ref[2][0] = 6000;
+    sensor_ref[3][0] = 5000;
+    sensor_ref[4][0] = 5000;
+    sensor_ref[5][0] = 5500;
+
+    // values above which sensor is over a line
+    sensor_ref[0][1] = 11000;
+    sensor_ref[1][1] = 11000;
+    sensor_ref[2][1] = 11000;
+    sensor_ref[3][1] = 8500;
+    sensor_ref[4][1] = 76000;
+    sensor_ref[5][1] = 9500;
+
     vars->cycles++;
     //copy previous reflectance data
     char i;
@@ -50,44 +68,26 @@ void timing0(global * vars){
         //start motors
     }
     else{
-
-        //motor speed control
-        //center around calibration value + take absolute value
-        for(i = 0; i < 8; i++){
-            vars->reflect[i] -= vars->calib[i];
-            if(vars->reflect[i] < 0) vars->reflect[i] *= -1;
-            linedata[i] = vars->reflect[i];
-        }
-        /*//for controlling RGB LED (only if PMAP control set up)
-        TIMER_A0->CCR[3] = reflect[5]/512;
-        TIMER_A0->CCR[4] = reflect[2]/512;*/
-
-        //find "expectation value"
-        //normalize area to 1024
-        for(i = 0; i < 8; i++){
-            norm += linedata[i];
-        }
-        for(i = 0; i < 8; i++){
-            linedata[i] *= 1024;
-            linedata[i] /= norm;
-            peak += i * linedata[i];
-        }
-        //peak - 4096 should give posn. of center of the line on scale from -4096 to +4096
-
-        //characterize "waveform" to find splits, lost lines, etc.
-
-
-        //adjust irDriver variables
-        vars->irDriveL -= peak/1024;
-        vars->irDriveR += peak/1024;
-
         if(vars->ctlstate == LINE_FOLLOW){
-            powerDiff(500, vars->irDriveR);
-        }
-        else{
-            //reset to go straight when line follower reenabled
-            vars->irDriveL = 500;
-            vars->irDriveR = 500;
+            // determine which sensors are over a line
+                    sum_l = 0;
+                    sum_r = 0;
+                    for(i=1; i<7; ++i)
+                    {
+                        if((vars->reflect[i]<sensor_ref[i][0]) || (vars->reflect[i]>sensor_ref[i][1])){
+                            if(i<4) sum_l += 1;
+                            else sum_r += 1;
+                        }
+                    }
+
+                    // turn
+                    if(sum_l>sum_r) {
+                        powerDiff(50, 400);
+                    } else if (sum_r>sum_l) {
+                        powerDiff(400, 50);
+                    } else {
+                        powerDiff(400, 400);
+                    }
         }
     }
 }
