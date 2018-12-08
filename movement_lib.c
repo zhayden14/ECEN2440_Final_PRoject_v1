@@ -2,13 +2,7 @@
 #include "msp.h"
 #include "movement_lib.h"
 
-#define LEFT_MOTOR 1
-#define RIGHT_MOTOR 2
-#define FORWARDS 0
-#define BACKWARDS 1
-#define RED 0
-#define GREEN 1
-#define BLUE 2
+
 
 static size_t turns_rgt = 0;
 static size_t turns_lft = 0;
@@ -25,8 +19,6 @@ void PORT4_IRQHandler()
     }
     P4->IFG = 0;
 }
-
-static inline void setDir(unsigned char, unsigned char);
 
 void setupMovement()
 {
@@ -90,7 +82,7 @@ static inline void setPWMPct(unsigned char motor, unsigned int percent)
     TIMER_A0->CCR[motor] = percent;
 }
 
-static inline void setDir(unsigned char motor, unsigned char direction)
+inline void setDir(unsigned char motor, unsigned char direction)
 {
     const unsigned char lft_mask = 0x01;
     const unsigned char rgt_mask = 0x02;
