@@ -40,6 +40,37 @@ void TA3_N_IRQHandler(void){
         }
 }
 
+//bump switch interrupt handler
+void PORT6_IRQHandler(void){
+    //disable interrupt
+    NVIC_DisableIRQ(PORT6_IRQn);
+    var->ctlstate = BUMP_AVOID;
+    //will clear flags and reenable interrupt later
+
+    //back up
+    unsigned long int w;
+    powerDiff(0,0);
+    setDir(LEFT_MOTOR, BACKWARDS);
+    setDir(RIGHT_MOTOR, BACKWARDS);
+    powerDiff(125, 125);
+    for(w = 0; w < 262144; w++){}
+
+    //reenable interrupts
+    P6IFG = 0x00;
+    NVIC_EnableIRQ(PORT6_IRQn);
+
+    //move to parallel position
+    rotDeg(-90);
+    moveStraightDist(2880);
+    rotDeg(90);
+
+    //move forwards and to line
+    moveStraightDist(2880);
+    rotDeg(45);
+    moveStraightDist(3600);
+    var->ctlstate = LINE_FOLLOW;
+}
+
 void main(void)
 {
 	WDT_A->CTL = WDT_A_CTL_PW | WDT_A_CTL_HOLD;		// stop watchdog timer
@@ -56,6 +87,16 @@ void main(void)
 	    var.calib[i] = 0;
 	    var.reflect[i] = 0;
 	}
+
+	//configure port 6 (bump switch input)
+	P6DIR &= 0xC0;    //All pins are inputs
+	P6SEL0 &= 0xC0;   //all pins are configured for GPIO
+	P6SEL1 &= 0xC0;   //
+	P6REN |= 0x3F;    //enable pullup resistors
+	P6OUT  |= 0x3F;
+	P6IES |= 0x3F;   //interrupt on low to high transition
+	P6IE  |= 0x3F;   //interrupts enabled on bump switches
+	P6IFG &= 0xC0;
 
 	setupMovement();
 	timingSetup();

@@ -48,6 +48,7 @@ void timing0(global * vars){
     if(vars->cycles == 25){
         vars->ctlstate = LINE_FOLLOW;
         //enable IR sensors and bump switches
+        NVIC_EnableIRQ(PORT6_IRQn);
         //start motors
     }
     else{
