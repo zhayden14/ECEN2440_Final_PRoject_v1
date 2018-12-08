@@ -10,6 +10,8 @@
 #include "movement_lib.h"
 #include "timing.h"
 
+#define SPEED_DIVIDE 2
+
 void timing0(global * vars){
     int norm = 0;
     vars->peak = 0;
@@ -23,6 +25,10 @@ void timing0(global * vars){
     for(i = 4; i < 8; i++){
         vars->reflect[i] = TIMER_A2->CCR[i-3];
     }
+    /*for(i = 0; i < 4; i++){
+        TIMER_A1->CCR[i] = 0;
+        TIMER_A2->CCR[i] = 0;
+    }*/
 
     //set ports 5, 6, 7 to GPIO
     P5SEL0 &= 0x3F;
@@ -84,28 +90,54 @@ void timing0(global * vars){
         //vars->irDriveR -= (vars->peak-4096)/512;
 
         if(vars->ctlstate == LINE_FOLLOW){
-            if(vars->reflect[0] > 2048){
-                powerDiff(125, 16);
+            /*if(vars->reflect[0] > 2048){
+                powerDiff(63/SPEED_DIVIDE, 500/SPEED_DIVIDE);
             }
             else if(vars->reflect[7] > 2048){
-                powerDiff(16, 125);
+                powerDiff(500/SPEED_DIVIDE, 63/SPEED_DIVIDE);
             }
             else if(vars->reflect[1] > 2048){
-                powerDiff(125, 32);
+                powerDiff(125/SPEED_DIVIDE, 500/SPEED_DIVIDE);
             }
             else if(vars->reflect[6] > 2048){
-                powerDiff(32, 125);
+                powerDiff(500/SPEED_DIVIDE, 125/SPEED_DIVIDE);
             }
             else if(vars->reflect[2] > 2048){
-                powerDiff(125, 63);
+                powerDiff(250/SPEED_DIVIDE, 500/SPEED_DIVIDE);
             }
             else if(vars->reflect[5] > 2048){
-                powerDiff(63, 125);
+                powerDiff(500/SPEED_DIVIDE, 250/SPEED_DIVIDE);
             }
             else{
-                powerDiff(125, 125);
+                powerDiff(500/SPEED_DIVIDE, 500/SPEED_DIVIDE);
+            }*/
+            if(vars->reflect[0] > 2048){
+                powerDiff(50, 400);
             }
-
+            else if(vars->reflect[7] > 2048){
+                powerDiff(400, 50);
+            }
+            else if(vars->reflect[6] > 2048){
+                powerDiff(100, 400);
+            }
+            else if(vars->reflect[1] > 2048){
+                powerDiff(400, 100);
+            }
+            else if(vars->reflect[2] > 2048){
+                powerDiff(400, 200);
+            }
+            else if(vars->reflect[5] > 2048){
+                powerDiff(200, 400);
+            }
+            else if(vars->reflect[4] > 2048){
+                powerDiff(400, 300);
+            }
+            else if(vars->reflect[3] > 2048){
+                powerDiff(300, 400);
+            }
+            else{
+                powerDiff(400, 400);
+            }
         }
     }
 }
@@ -154,7 +186,7 @@ void timingSetup(void){
 
      //configure Timer A3 (general-purpose timing) [change to continuous mode]
      TIMER_A3->CCTL[0] = 0x0090;    // CCI0 toggle
-     TIMER_A3->CCR[0] =  10000;    // Period of about 100 Hz
+     TIMER_A3->CCR[0] =  5000;    // Period of about 100 Hz
      TIMER_A3->EX0 =     0x0002;    // Divide by 3
      TIMER_A3->CCTL[1] = 0x0050;    // CCR1 toggle/reset
      TIMER_A3->CCR[1] =  20;         //after 20 counts, GPIO->input
