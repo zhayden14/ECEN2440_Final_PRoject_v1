@@ -13,24 +13,27 @@
 void timing0(global * vars){
     int peak = 0, diff = 0;
     int sum_l, sum_r;
-    int sensor_ref[6][2];
+    int sensor_ref[8][2];
 
     // values below which sensor is over a line
-    sensor_ref[0][0] = 6250;
-    sensor_ref[1][0] = 6000;
-    sensor_ref[2][0] = 6000;
-    sensor_ref[3][0] = 5000;
-    sensor_ref[4][0] = 5000;
-    sensor_ref[5][0] = 5500;
+    sensor_ref[0][0] = -6000;
+    sensor_ref[1][0] = 4900;
+    sensor_ref[2][0] = 4600;
+    sensor_ref[3][0] = -5000;
+    sensor_ref[4][0] = -5000;
+    sensor_ref[5][0] = 4900;
+    sensor_ref[6][0] = 5600;
+    sensor_ref[7][0] = -5001;
 
     // values above which sensor is over a line
-    sensor_ref[0][1] = 11000;
-    sensor_ref[1][1] = 11000;
-    sensor_ref[2][1] = 11000;
-    sensor_ref[3][1] = 8500;
-    sensor_ref[4][1] = 76000;
-    sensor_ref[5][1] = 9500;
-
+    sensor_ref[0][1] = 2000000;
+    sensor_ref[1][1] = 13000;
+    sensor_ref[2][1] = 14000;
+    sensor_ref[3][1] = 8501;
+    sensor_ref[4][1] = 2200000;
+    sensor_ref[5][1] = 16000;
+    sensor_ref[6][1] = 18000;
+    sensor_ref[7][1] = 8501;
     vars->cycles++;
     //copy previous reflectance data
     char i;
@@ -72,7 +75,7 @@ void timing0(global * vars){
             // determine which sensors are over a line
                     sum_l = 0;
                     sum_r = 0;
-                    for(i=1; i<7; ++i)
+                    for(i=0; i<8; ++i)
                     {
                         if((vars->reflect[i]<sensor_ref[i][0]) || (vars->reflect[i]>sensor_ref[i][1])){
                             if(i<4) sum_l += 1;
@@ -82,11 +85,11 @@ void timing0(global * vars){
 
                     // turn
                     if(sum_l>sum_r) {
-                        powerDiff(50, 400);
+                        powerDiff(50, 300);
                     } else if (sum_r>sum_l) {
-                        powerDiff(400, 50);
+                        powerDiff(300, 50);
                     } else {
-                        powerDiff(400, 400);
+                        powerDiff(300, 300);
                     }
         }
     }
