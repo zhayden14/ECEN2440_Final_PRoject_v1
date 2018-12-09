@@ -16,6 +16,7 @@ void timing0(global * vars){
     int norm = 0;
     vars->peak = 0;
     int linedata[8] = {0, 0, 0, 0, 0, 0, 0, 0};
+    int diff[7] = {0, 0, 0, 0, 0, 0, 0};
     vars->cycles++;
     //copy previous reflectance data
     char i;//, on = 0, mask = 1;
@@ -61,31 +62,33 @@ void timing0(global * vars){
 
         //motor speed control
         //center around calibration value + take absolute value
-        for(i = 0; i < 8; i++){
+        /*for(i = 0; i < 8; i++){
             vars->reflect[i] -= vars->calib[i];
             if(vars->reflect[i] < 0) vars->reflect[i] *= -1;
             linedata[i] = vars->reflect[i];
-        }
+        }*/
         /*//for controlling RGB LED (only if PMAP control set up)
         TIMER_A0->CCR[3] = reflect[5]/512;
         TIMER_A0->CCR[4] = reflect[2]/512;*/
 
         //find "expectation value"
         //normalize area to 1024
-        for(i = 0; i < 8; i++){
+        /*for(i = 0; i < 8; i++){
             norm += linedata[i];
         }
         for(i = 0; i < 8; i++){
             linedata[i] *= 1024;
             linedata[i] /= norm;
             vars->peak += i * linedata[i];
-        }
+        }*/
         //peak - 4096 should give posn. of center of the line on scale from -4096 to +4096
 
         //characterize "waveform" to find splits, lost lines, etc.
 
 
-
+        for(i = 0; i < 7; i++){
+            diff[i] = vars->reflect[i]-vars->reflect[i+1];
+        }
         //vars->irDriveL += (vars->peak-4096)/512;
         //vars->irDriveR -= (vars->peak-4096)/512;
 
